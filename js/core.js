@@ -6,7 +6,8 @@ window.HASS_DEV = __DEV__;
 
 const init = window.createHassConnection = function (password) {
   const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
-  const url = `${proto}://${window.location.host}/api/websocket`;
+  const base = "/ha"
+  const url = `${proto}://${window.location.host}${base}/api/websocket`;
   const options = {
     setupRetry: 10,
   };
@@ -21,7 +22,7 @@ const init = window.createHassConnection = function (password) {
       return conn;
     });
 };
-
+window.basePath = base;
 if (window.noAuth) {
   window.hassConnection = init();
 } else if (window.localStorage.authToken) {
@@ -32,6 +33,6 @@ if (window.noAuth) {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('/service_worker.js');
+    navigator.serviceWorker.register('${window.basePath}/service_worker.js');
   });
 }

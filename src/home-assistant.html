@@ -106,10 +106,10 @@ Polymer({
       this.iconsLoaded = true;
     };
 
-    this.importHref('/static/mdi-' + this.icons + '.html',
+    this.importHref(this.hass.basePath + '/static/mdi-' + this.icons + '.html',
                     success,
                     function () {
-                      this.importHref('/static/mdi.html', success, success);
+                      this.importHref(this.hass.basePath + '/static/mdi.html', success, success);
                     });
   },
 
@@ -126,6 +126,7 @@ Polymer({
     this.hass = Object.assign({
       connection: conn,
       connected: true,
+      basePath: window.basePath,
       states: null,
       config: null,
       themes: null,
