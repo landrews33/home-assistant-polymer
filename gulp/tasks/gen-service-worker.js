@@ -84,7 +84,7 @@ gulp.task('gen-service-worker', () => {
       rootDir + '/images/card_media_player_bg.png',
     ],
     stripPrefix: '..',
-    replacePrefix: 'static',
+    replacePrefix: '/static',
     verbose: true,
   };
 
