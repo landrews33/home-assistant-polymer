@@ -28,13 +28,13 @@
     <app-location route="{{route}}"></app-location>
     <app-route
       route="{{route}}"
-      pattern="[[basePathTrailing]]/:panel"
+      pattern="[[basePath]]/:panel"
       data="{{routeData}}"
       tail="{{routeTail}}"
     ></app-route>
     <app-route
       route="{{route}}"
-      pattern="[[basePathTrailing]]/states"
+      pattern="[[basePath]]/states"
       tail="{{statesRouteTail}}"
     ></app-route>
     <ha-voice-command-dialog
@@ -94,9 +94,9 @@
     properties: {
       hass: Object,
       
-      basePathTrailing: {
+      basePath: {
       	type: String,
-      	value: window.basePath.substring(1) + '/'
+      	value: window.basePath
       },
 
       narrow: Boolean,
