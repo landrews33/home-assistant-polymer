@@ -183,6 +183,17 @@
     observers: [
       'updateCards(columns, states, showIntroduction, panelVisible, viewVisible)',
     ],
+    
+    _ensureCustomUILoaded: function (cardType) {
+        this.importHref(
+            '/local/custom_ui/ha-' + cardType + 'card.html',
+            function () {},
+            /* eslint-disable no-console */
+            function () { console.error('Error loading %s from /local/custom_ui/ha-%s-card.html', cardType, cardType); },
+            /* eslint-enable no-console */
+            true);
+      },
+
 
     updateCards: function (columns, states, showIntroduction, panelVisible, viewVisible) {
       /* eslint-disable no-console */
@@ -239,6 +250,8 @@
         });
       }
 
+      
+      
       function addEntitiesCard(name, entities, groupEntity) {
         var owncard;
         var other;
@@ -254,7 +267,11 @@
         entities.forEach(function (entity) {
           var domain = computeDomain(entity);
 
-          if (domain in DOMAINS_WITH_CARD) {
+          if (domain in DOMAINS_WITH_CARD || (entity.attributes && entity.attributes.custom_owncard) {
+        	if(entity.attributes && entity.attributes.custom_owncard) 
+        		{
+        			this._ensureCustomUILoaded(entity.attributes.custom_owncard);
+        		}
             owncard.push(entity);
             size += DOMAINS_WITH_CARD[domain];
           } else {
@@ -267,7 +284,7 @@
         size += other.length > 0;
 
         curIndex = getIndex(size);
-
+        
         if (other.length > 0) {
           cards.columns[curIndex].push({
             hass: hass,
@@ -276,11 +293,23 @@
             groupEntity: groupEntity || false,
           });
         }
+        
+        function computeCard(entity) 
+        {
+        	if(entity.attributes && entity.attributes.custom_owncard) 
+			{
+        		return entity.attributes.custom_owncard;
+			} 
+        	else
+        	{
+        		return computeDomain(entity);	
+        	}
+        }
 
         owncard.forEach(function (entity) {
           cards.columns[curIndex].push({
             hass: hass,
-            cardType: computeDomain(entity),
+            cardType: computeCard(entity),
             stateObj: entity,
           });
         });
